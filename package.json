@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "color-convert": "^2.0.1",
     "expo": "~40.0.0",
     "expo-app-loading": "^1.0.1",
     "expo-font": "~8.4.0",
@@ -16,10 +17,12 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
+    "react-native-keyboard-aware-scrollview": "^2.1.0",
     "react-native-web": "~0.13.12"
   },
   "devDependencies": {
-    "@babel/core": "~7.9.0"
+    "@babel/core": "~7.9.0",
+    "yarn": "^1.22.10"
   },
   "private": true
 }
