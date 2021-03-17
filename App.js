@@ -1,10 +1,16 @@
 import React from "react";
 import AppLoading from "expo-app-loading";
-import
 import { Container, Text } from "native-base";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
-
+//Para React Navigation
+import { NavigationContainer } from "@react-navigation/native";
+// import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+const Tab = createBottomTabNavigator();
+// Modulos Propios
+import Registro from "./views/components/Registro";
+import Login from "./views/components/Login";
 export default class App extends React.Component {
   constructor(props) {
     super(props);
