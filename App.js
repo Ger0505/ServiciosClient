@@ -1,10 +1,10 @@
 import React from "react";
 import AppLoading from "expo-app-loading";
-import * as Components from "native-base";
+import
+import { Container, Text } from "native-base";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 
-const [Container, Text] = [Components.Container, Components.Text]; 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
