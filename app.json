@@ -28,5 +28,10 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
+  },
+  "colors":{
+    "main": "#5257F2",
+    "second": "#1DDCAF",
+    "third": "#00c29f"
   }
 }

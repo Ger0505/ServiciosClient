@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Card, CardItem, Text, Content, Body} from 'native-base';
 import { StyleSheet } from 'react-native';
+import { colors } from '../app.json'
 
 class ListaPedido extends Component {
     state = {  }
@@ -74,10 +75,10 @@ export default ListaPedido;
 
 const styles = StyleSheet.create({
   header:{
-    backgroundColor: 'red',
+    backgroundColor: colors.second,
   },
   textHeader:{
-    color: 'white'
+    color: 'black'
   },
   date:{
     fontStyle: 'italic'

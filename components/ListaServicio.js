@@ -3,6 +3,7 @@ import { Container, Item, Input, Button, Text, Header, Icon, Content, Card, Thum
 import {FontAwesome} from '@expo/vector-icons';
 import { StyleSheet } from 'react-native';
 import { Col, Grid } from 'react-native-easy-grid';
+import { colors } from '../app.json'
 
 import imgDefault from './../assets/1.png';
 
@@ -78,7 +79,7 @@ export default ListaServicio;
 {/* <Thumbnail source= {require(`../images/${person.id}.jpg`)} /> */}
 const styles = StyleSheet.create({
   search:{
-    backgroundColor: '#f37d10'
+    backgroundColor: colors.main
   },
   img:{
     height: 100,
