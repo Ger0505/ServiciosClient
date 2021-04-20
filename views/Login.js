@@ -1,19 +1,47 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
-import {View, Image, StyleSheet} from 'react-native';
-import {Form, Item, Input, Body, Text, CheckBox, Button} from 'native-base';
-import { colors } from '../app.json'
+import { View, Image, StyleSheet } from 'react-native';
+import { Form, Item, Input, Body, Text, CheckBox, Button } from 'native-base';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { colors, url } from '../global.json'
 
 import Logo from '../assets/logo.png'
 
 class Login extends Component {
   state = {
     correo: '',
-    password: ''
+    password: '',
+    textError: ''
   }
 
-  login = () =>{
-    this.props.navigation.navigate('UserApp')
+  login = async () => {
+    await fetch(url + 'usu/login', {
+      method: "POST",
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        correo: this.state.correo,
+        password: this.state.password
+      })
+    }).then(res => res.json())
+      .then(resJson => {
+        if (resJson.code === 401 || resJson.code === 500) {
+          this.setState({ textError: 'Verificar usuario y/o contraseña' })
+        } else if (resJson.code === 200) {
+          this.guardarSession(resJson.usuario)
+        }
+      })
+      .catch(err => {
+        console.log("ERROR:" + err);
+      })
+  }
+
+  guardarSession = async data => {
+    try {
+      await AsyncStorage.setItem('@usuario', JSON.stringify(data))
+      this.props.navigation.navigate('UserApp')
+    } catch (err) {
+      console.log("ERROR:" + err);
+    }
   }
 
   render() {
@@ -27,14 +55,23 @@ class Login extends Component {
 
           <View style={styles.formArea}>
             <Text style={[styles.textContainer, styles.signin]}>Iniciar Sesión</Text>
+            <Text style={{ color: 'red', fontSize: 15, alignSelf: 'center' }} >{this.state.textError}</Text>
             <Form style={styles.mainForm}>
-            <Item rounded style={styles.input}>
-              <Ionicons name="mail" size={16} color="gray" />
-              <Input placeholder="Correo Electrónico" />
-            </Item>
               <Item rounded style={styles.input}>
-                <FontAwesome name="lock" size={24} color="gray"/>
-                <Input placeholder="Contraseña" secureTextEntry={true}/>
+                <Ionicons name="mail" size={16} color="gray" />
+                <Input placeholder="Correo Electrónico"
+                  value={this.state.correo}
+                  onChangeText={text => this.setState({ correo: text })}
+                  onChange={() => this.setState({ textError: '' })}
+                />
+              </Item>
+              <Item rounded style={styles.input}>
+                <FontAwesome name="lock" size={24} color="gray" />
+                <Input placeholder="Contraseña" secureTextEntry={true}
+                  value={this.state.password}
+                  onChangeText={text => this.setState({ password: text })}
+                  onChange={() => this.setState({ textError: '' })}
+                />
               </Item>
               <View style={styles.Button}>
                 <Button block style={styles.mainBtn}>
@@ -42,9 +79,9 @@ class Login extends Component {
                 </Button>
               </View>
             </Form>
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={{textDecorationLine: 'underline'}} onPress={() => navigation.navigate('Registro')}>Registrarse</Text>
-          </View>
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ textDecorationLine: 'underline' }} onPress={() => navigation.navigate('Registro')}>Registrarse</Text>
+            </View>
           </View>
         </View>
       </View>
@@ -70,9 +107,9 @@ const styles = StyleSheet.create({
     paddingLeft: 26.3,
     paddingRight: 26.3,
   },
-  image:{
+  image: {
     position: 'relative',
-    top: '15%',
+    top: '10%',
     alignSelf: 'center',
     width: 105,
     height: 75
@@ -81,7 +118,6 @@ const styles = StyleSheet.create({
     color: '#FCFDFF',
     // fontFamily: 'GoogleSans-Bold',
     fontSize: 24,
-    marginBottom: 30,
     position: 'relative',
     top: '20%',
     alignSelf: 'center',
@@ -92,7 +128,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#ffffff',
     borderRadius: 5,
-    top: '20%',
+    top: '15%',
     paddingBottom: 40,
   },
   signin: {
@@ -126,7 +162,7 @@ const styles = StyleSheet.create({
     // fontFamily: 'GoogleSans-Medium',
     fontSize: 12,
   },
-  input:{
+  input: {
     marginTop: 5,
     marginBottom: 5,
     paddingLeft: 10,

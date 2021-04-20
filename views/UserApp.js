@@ -33,37 +33,45 @@ const ServiceStackScreen = () => (
   </ServiceStack.Navigator>
 )
 
-const UserApp = () => (
-  <NavigationContainer independent={true}>
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+const UserApp = ({navigation}) => {
 
-          if (route.name === 'Services') {
-            iconName = 'list';
-          } else if (route.name === 'ListaPedido') {
-            iconName = 'shopping-basket';
-          } else if (route.name === 'ListaNotificacion') {
-            iconName = 'bell';
-          } else if (route.name === 'Perfil') {
-            iconName = 'cog';
-          }
+  const   lacallbacion = () =>{
+    navigation.navigate('Login')
+  }
 
-          return <FontAwesome name={iconName} size={24} color={color} />;
-        },
-      })}
-      tabBarOptions={{
-        activeTintColor: 'black',
-        inactiveTintColor: 'gray',
-      }}
-    >
-      <Tab.Screen name="Services" component={ServiceStackScreen} />
-      <Tab.Screen name="ListaPedido" component={ListaPedido} />
-      <Tab.Screen name="ListaNotificacion" component={ListaNotificacion} />
-      <Tab.Screen name="Perfil" component={Perfil} />
-    </Tab.Navigator>
-  </NavigationContainer>
-)
+  const child = () => <Perfil cb={lacallbacion}/>
 
+  return (
+    <NavigationContainer independent={true}>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Services') {
+              iconName = 'list';
+            } else if (route.name === 'ListaPedido') {
+              iconName = 'shopping-basket';
+            } else if (route.name === 'ListaNotificacion') {
+              iconName = 'bell';
+            } else if (route.name === 'Perfil') {
+              iconName = 'cog';
+            }
+
+            return <FontAwesome name={iconName} size={24} color={color} />;
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: 'black',
+          inactiveTintColor: 'gray',
+        }}
+      >
+        <Tab.Screen name="Services" component={ServiceStackScreen} />
+        <Tab.Screen name="ListaPedido" component={ListaPedido} />
+        <Tab.Screen name="ListaNotificacion" component={ListaNotificacion} />
+        <Tab.Screen name="Perfil" component={child} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  )
+}
 export default UserApp;

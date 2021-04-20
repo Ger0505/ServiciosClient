@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Card, CardItem, Text, Content, Body} from 'native-base';
 import { StyleSheet } from 'react-native';
-import { colors } from '../app.json'
+import { colors } from '../global.json'
 
 class ListaPedido extends Component {
     state = {  }

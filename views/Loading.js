@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View, Image, Text, StyleSheet, Animated, ActivityIndicator } from 'react-native'
-import { colors } from '../app.json'
+import { colors } from '../global.json'
 
 import Logo from '../assets/logo.png'
 

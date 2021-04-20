@@ -3,7 +3,7 @@ import { Container, Item, Input, Button, Text, Header, Icon, Content, Card, Thum
 import {FontAwesome} from '@expo/vector-icons';
 import { StyleSheet } from 'react-native';
 import { Col, Grid } from 'react-native-easy-grid';
-import { colors } from '../app.json'
+import { colors } from '../global.json'
 
 import imgDefault from './../assets/1.png';
 
