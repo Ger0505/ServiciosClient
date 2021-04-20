@@ -8,7 +8,7 @@ import axios from 'axios'
 import { useForm, Controller } from "react-hook-form"
 import ChangePwdForm from './ChangePwdForm'
 
-const Perfil = () => {
+const Perfil = ({cb}) => {
   const [usuario, setUsuario] = useState({ nombre: '', apellidos: '', telefono: '', direccion: '', correo: '' })
   const { control, handleSubmit, formState: { errors }, reset } = useForm({ defaultValues: usuario })
 
@@ -70,7 +70,7 @@ const Perfil = () => {
             axios.delete(url + "usu/delete/" + usuario._id)
               .then(res => {
                 if (res.data.code === 200) {
-                  this.props.cb()
+                  cb()
                 }
               }
               )
@@ -133,7 +133,7 @@ const Perfil = () => {
             name="apellidos"
             rules={{
               required: { value: true, message: 'Los apellidos son requeridos' },
-              pattern: { value: /^[a-zA-Z '.-]*$/, message: 'Formato de apellidos inválido' }
+              pattern: { value: /^[a-záéíúóñA-ZÁÉÍÓÚÑ '.-]*$/, message: 'Formato de apellidos inválido' }
             }}
             defaultValue={usuario.apellidos}
           />

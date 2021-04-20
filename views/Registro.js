@@ -19,7 +19,7 @@ const Registro = () => {
     data.telefono = parseInt(data.telefono)
     axios.post(url + 'usu/insert', data)
       .then(res => {
-        if(res.data.hasOwnProperty("msg")) setPwdError(res.data.msg)
+        if(res.data.hasOwnProperty("status")) setPwdError(res.data.msg)
         else if (res.status === 200) this.props.navigation.navigate('Login')
       })
       .catch(err => console.log(err))
