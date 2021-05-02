@@ -7,7 +7,7 @@ import { colors, url } from '../global.json'
 import axios from 'axios'
 import { useForm, Controller } from "react-hook-form";
 
-const Registro = () => {
+const Registro = ({navigation}) => {
   const { control, handleSubmit, formState: { errors } } = useForm()
   const [pwdError, setPwdError] = useState('')
 
@@ -20,7 +20,7 @@ const Registro = () => {
     axios.post(url + 'usu/insert', data)
       .then(res => {
         if(res.data.hasOwnProperty("status")) setPwdError(res.data.msg)
-        else if (res.status === 200) this.props.navigation.navigate('Login')
+        else if (res.status === 200) navigation.navigate('Login')
       })
       .catch(err => console.log(err))
   }

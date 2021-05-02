@@ -68,7 +68,7 @@ const UserApp = ({navigation}) => {
       >
         <Tab.Screen name="Services" component={ServiceStackScreen} />
         <Tab.Screen name="ListaPedido" component={ListaPedido} />
-        <Tab.Screen name="ListaNotificacion" component={ListaNotificacion} />
+        {/* <Tab.Screen name="ListaNotificacion" component={ListaNotificacion} /> */}
         <Tab.Screen name="Perfil" component={child} />
       </Tab.Navigator>
     </NavigationContainer>
