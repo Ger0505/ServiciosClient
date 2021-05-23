@@ -25,9 +25,9 @@ const ListaServicio = ({ navigation }) => {
 
   useEffect(() => {
     const getEmpresas = async () => {
-      let res = await API.getData("emp/");
-      setEmpresas(res);
-    };
+      let res = await API.getData("emp")
+      setEmpresas(res)
+    }
 
     getEmpresas();
   }, []);

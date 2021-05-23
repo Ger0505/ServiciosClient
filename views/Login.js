@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { View, Image, StyleSheet } from 'react-native';
-import { Form, Item, Input, Body, Text, CheckBox, Button } from 'native-base';
+import { Form, Item, Input, Text, Button } from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { colors, url } from '../global.json'
+import { API } from '../helpers'
+import { colors } from '../global.json'
 
 import Logo from '../assets/logo.png'
 
@@ -15,29 +16,23 @@ class Login extends Component {
   }
 
   login = async () => {
-    await fetch(url + 'usu/login', {
-      method: "POST",
-      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        correo: this.state.correo,
-        password: this.state.password
-      })
-    }).then(res => res.json())
-      .then(resJson => {
-        if (resJson.code === 401 || resJson.code === 500) {
-          this.setState({ textError: 'Verificar usuario y/o contraseña' })
-        } else if (resJson.code === 200) {
-          this.guardarSession(resJson.usuario)
-        }
-      })
-      .catch(err => {
-        console.log("ERROR:" + err);
-      })
+    let params = {
+      correo: this.state.correo,
+      password: this.state.password
+    }
+    let res = await API.getLog("log/usu", params)
+    console.log(res);
+    if (res.code === 401 || res.code === 500) {
+      this.setState({ textError: 'Verificar usuario y/o contraseña' })
+    } else if (res.code === 200) {
+      this.guardarSession(res)
+    }
   }
 
-  guardarSession = async data => {
+  guardarSession = async res => {
     try {
-      await AsyncStorage.setItem('@usuario', JSON.stringify(data))
+      await AsyncStorage.setItem('@usuario', JSON.stringify(res.usuario))
+      await AsyncStorage.setItem('@token',JSON.stringify(res.token))
       this.props.navigation.navigate('UserApp')
     } catch (err) {
       console.log("ERROR:" + err);

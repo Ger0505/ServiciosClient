@@ -1,22 +1,12 @@
-import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Form,
-  Item,
-  Input,
-  Content,
-  Button,
-  Text,
-  Card,
-  CardItem
-} from "native-base";
-import { StyleSheet, Alert } from "react-native";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
-import { url } from "../global.json";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-import { useForm, Controller } from "react-hook-form";
-import ChangePwdForm from "./ChangePwdForm";
+import React, { useState, useEffect } from "react"
+import { Container, Form, Item, Input, Content, Button, Text, Card, CardItem } from 'native-base'
+import { StyleSheet, Alert } from 'react-native'
+import { Ionicons, FontAwesome } from "@expo/vector-icons"
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { url } from '../global.json'
+import { API } from '../helpers'
+import { useForm, Controller } from "react-hook-form"
+import ChangePwdForm from './ChangePwdForm'
 
 const Perfil = ({ cb }) => {
   const [usuario, setUsuario] = useState({
@@ -51,54 +41,41 @@ const Perfil = ({ cb }) => {
     }
   };
 
-  const onSubmit = (data) => {
-    data._id = usuario._id;
-    data.telefono = parseInt(data.telefono);
-    axios
-      .put(url + "usu/update", data)
-      .then((res) => {
-        if (res.status === 200) {
-          Alert.alert(
-            "Actualizar Perfil",
-            "Su perfil fue actualizado correctamente",
-            [
-              {
-                text: "Cancel",
-                style: "cancel"
-              }
-            ],
-            { cancelable: true }
-          );
-          getNewSession(data);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  const onSubmit = async data => {
+    data._id = usuario._id
+    data.telefono = parseInt(data.telefono)
+    let res = await API.getBody('usu/update', 'PUT', data)
+    if(res.status === 200){
+      Alert.alert(
+        'Actualizar Perfil', 'Su perfil fue actualizado correctamente',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel'
+          },
+        ],
+        { cancelable: true },
+      )
+      getNewSession(data)
+    }
+  }
 
   const getNewSession = async (data) => {
     await AsyncStorage.setItem("@usuario", JSON.stringify(data));
   };
 
-  const eliminarPerfil = () => {
+  const eliminarPerfil = async () => {
     Alert.alert(
       "Eliminar Usuario",
       "¿Seguro que quiere eliminar la cuenta actual?",
       [
         {
           text: "Eliminar Cuenta",
-          onPress: () => {
-            axios
-              .delete(url + "usu/delete/" + usuario._id)
-              .then((res) => {
-                if (res.data.code === 200) {
-                  cb();
-                }
-              })
-              .catch((err) => {
-                console.log("ERROR DELETE:" + err);
-              });
+          onPress: async () => {
+            let res = await API.getData("usu/delete/" + usuario._id, "DELETE")
+            if (res.data.code === 200) {
+              cb()
+            }
           }
         },
         {
@@ -113,6 +90,12 @@ const Perfil = ({ cb }) => {
   };
 
   const resetear = () => session();
+
+  const cerrarSesion = async () =>{
+    await AsyncStorage.removeItem("@usuario")
+    await AsyncStorage.removeItem("@token")
+    cb()
+  }
 
   return (
     <Container>
@@ -267,6 +250,13 @@ const Perfil = ({ cb }) => {
           </CardItem>
           <ChangePwdForm styles={styles} _id={usuario._id} url={url} />
         </Card>
+
+        <Card style={styles.card}>
+          <Button danger block onPress={cerrarSesion}>
+            <Text>Cerrar Sesión</Text>
+          </Button>
+        </Card>
+
       </Content>
     </Container>
   );

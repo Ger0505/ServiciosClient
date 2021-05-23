@@ -1,19 +1,10 @@
-import React, { useState } from "react";
-import { View, StyleSheet, SafeAreaView, ScrollView } from "react-native";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
-import {
-  Form,
-  Item,
-  Input,
-  Body,
-  Text,
-  Button,
-  Container,
-  Content
-} from "native-base";
-import { LinearGradient } from "expo-linear-gradient";
-import { colors, url } from "../global.json";
-import axios from "axios";
+import React, { useState } from 'react'
+import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native'
+import { Ionicons, FontAwesome } from "@expo/vector-icons"
+import { Form, Item, Input, Body, Text, Button, Container, Content } from 'native-base'
+import { LinearGradient } from 'expo-linear-gradient'
+import { API } from '../helpers'
+import { colors, url } from '../global.json'
 import { useForm, Controller } from "react-hook-form";
 
 const Registro = () => {
@@ -24,20 +15,16 @@ const Registro = () => {
   } = useForm();
   const [pwdError, setPwdError] = useState("");
 
-  const onSubmit = (data) => {
+  const onSubmit = async data => {
     if (data.password !== data.repassword) {
       setPwdError("Las contraseñas no coinciden");
       return;
     }
-    data.telefono = parseInt(data.telefono);
-    axios
-      .post(url + "usu/insert", data)
-      .then((res) => {
-        if (res.data.hasOwnProperty("status")) setPwdError(res.data.msg);
-        else if (res.status === 200) this.props.navigation.navigate("Login");
-      })
-      .catch((err) => console.log(err));
-  };
+    data.telefono = parseInt(data.telefono)
+    let res = await API.getBody('log/insert', 'POST', data)
+    if(res.data.hasOwnProperty("status")) setPwdError(res.data.msg)
+    else if (res.status === 200) navigation.navigate('Login')
+  }
 
   return (
     <Container style={styles.container}>
