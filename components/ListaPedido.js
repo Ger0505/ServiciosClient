@@ -1,17 +1,21 @@
-import React, { useState, useEffect } from 'react'
-import { Container, Card, CardItem, Text, Content, Body } from 'native-base'
-import { StyleSheet } from 'react-native'
-import { colors } from '../global.json'
-import { API, Session } from "../helpers"
+import React, { useState, useEffect } from "react";
+import { Container, Card, CardItem, Text, Content, Body } from "native-base";
+import { StyleSheet } from "react-native";
+import { colors } from "../global.json";
+import { API, Session } from "../helpers";
+import { useFocusEffect } from "@react-navigation/native";
 
-const ItemPedido = ({data}) => ( 
-    <Card key={data._id}>
+const ItemPedido = ({ data }) => (
+  <Card key={data._id}>
     <CardItem header style={styles.header}>
-      <Text style={styles.textHeader, {flex: 2}}>{data.tipo}</Text>
-      <Text style={styles.date, styles.textHeader, {flex: 2}}> {data.fecha}</Text>
-      <Text style={{alignSelf: 'flex-end'}}>{data.hora}</Text>
+      <Text style={(styles.textHeader, { flex: 2 })}>{data.tipo}</Text>
+      <Text style={(styles.date, styles.textHeader, { flex: 2 })}>
+        {" "}
+        {data.fecha}
+      </Text>
+      <Text style={{ alignSelf: "flex-end" }}>{data.hora}</Text>
     </CardItem>
-    <CardItem >
+    <CardItem>
       <Body>
         <Text style={styles.title}>${data.precio}</Text>
         <Text style={styles.title}>Cantidad: {data.cantidad}</Text>
@@ -19,52 +23,63 @@ const ItemPedido = ({data}) => (
       </Body>
     </CardItem>
   </Card>
-)
+);
 
 const ListaPedido = () => {
-  const [pedidos, setPedidos] = useState([])
+  const [pedidos, setPedidos] = useState([]);
 
-  useEffect(()=>{
-    const getPedidos = async () =>{
-      let usuario = await Session.getSession()
-      if(usuario){
-        let res = await API.getData("ped/" + usuario._id)
-        setPedidos(res)
+  useEffect(() => {
+    const getPedidos = async () => {
+      let usuario = await Session.getSession();
+      if (usuario) {
+        let res = await API.getData("ped/usu/" + usuario._id);
+        setPedidos(res);
       }
-    }
+    };
 
-    getPedidos()
-  },[])
+    getPedidos();
+  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const getPedidos = async () => {
+        let usuario = await Session.getSession();
+        if (usuario) {
+          let res = await API.getData("ped/usu/" + usuario._id);
+          setPedidos(res);
+        }
+      };
+      getPedidos();
+    }, [])
+  );
 
   return (
     <Container>
       <Content padder>
-        {
-          pedidos.map(ped =>(
-            <ItemPedido data={ped}/>
-          ))
-        }
+        {pedidos.map((ped) => (
+          <ItemPedido data={ped} key={ped._id} />
+        ))}
       </Content>
     </Container>
-  )
-}
+  );
+};
 
-export default ListaPedido
+export default ListaPedido;
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: colors.second,
+    backgroundColor: colors.second
   },
   textHeader: {
-    color: 'black'
+    color: "black"
   },
   date: {
-    fontStyle: 'italic'
+    fontStyle: "italic"
   },
   title: {
-    fontWeight: 'bold'
+    fontWeight: "bold"
   },
   text: {
-    textAlign: 'justify'
+    textAlign: "justify"
   }
-})
+});
