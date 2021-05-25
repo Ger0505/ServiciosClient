@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Form, Item, Input, Button, Text } from 'native-base'
-import { Alert } from 'react-native'
+import { Alert, StyleSheet } from 'react-native'
 import { useForm, Controller } from "react-hook-form"
 import { FontAwesome } from "@expo/vector-icons"
 import { API } from '../helpers'
@@ -11,11 +11,12 @@ const ChangePwdForm = ({ styles, _id, url }) => {
 
     const onSutmit = async data => {
         if (data.nuevo !== data.re) {
-            setPwdError(true)
+            setPwdError("La confirmación no concuerda con la nueva contraseña")
+            reset()
         } else {
             data._id = _id
             let res = await API.getBody('usu/resetPwd', 'PUT', data)
-            if(res.data.hasOwnProperty("msg")) setPwdError(res.data.msg)
+            if(res.hasOwnProperty("msg")) setPwdError(res.msg)
             else if(res.status === 200){
                 Alert.alert(
                     'Cambiar Contraseña', 'Su contraseña fue cambiada correctamente',

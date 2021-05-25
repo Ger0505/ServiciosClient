@@ -25,7 +25,7 @@ const FormEstacionario = ({ navigation, route }) => {
   const { idEmp, empresa } = route.params;
 
   const _onSubmit = async () => {
-    if (litros === "" && !isLleno) {
+    if (litros === "" && parseInt(litros)<= 0 && !isLleno) {
       setError(true);
       return;
     }

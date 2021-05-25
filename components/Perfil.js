@@ -45,7 +45,7 @@ const Perfil = ({ cb }) => {
     data._id = usuario._id
     data.telefono = parseInt(data.telefono)
     let res = await API.getBody('usu/update', 'PUT', data)
-    if(res.status === 200){
+    if(res.code === 200){
       Alert.alert(
         'Actualizar Perfil', 'Su perfil fue actualizado correctamente',
         [
@@ -73,7 +73,7 @@ const Perfil = ({ cb }) => {
           text: "Eliminar Cuenta",
           onPress: async () => {
             let res = await API.getData("usu/delete/" + usuario._id, "DELETE")
-            if (res.data.code === 200) {
+            if (res.code === 200) {
               cb()
             }
           }

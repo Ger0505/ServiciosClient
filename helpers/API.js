@@ -1,5 +1,5 @@
 import { url, url_file } from "../global.json";
-import { Session } from '../helpers'
+import Session from './Session'
 
 class API{
     async getLog(URL, body){
@@ -16,7 +16,7 @@ class API{
     }
 
     async getBody(URL, method, body){
-        let token = Session.getToken()
+        let token = await Session.getToken()
         if(!token || token === null || token === undefined) return null
         let jsonObj = JSON.stringify(body)
         const query = await fetch(url + URL,

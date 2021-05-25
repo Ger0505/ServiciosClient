@@ -1,12 +1,8 @@
 import React, { useState, useEffect, Fragment } from "react";
 import {
   Container,
-  Item,
-  Input,
-  Button,
   Text,
   Header,
-  Icon,
   Content,
   Card,
   Thumbnail,
@@ -16,6 +12,7 @@ import { StyleSheet } from "react-native";
 import { Col, Grid } from "react-native-easy-grid";
 import { colors, url_file } from "../global.json";
 import { API } from "../helpers";
+import { useFocusEffect } from '@react-navigation/native'
 
 import imgDefault from "./../assets/1.png";
 const URL_FILE = url_file + "uploads/";
@@ -32,16 +29,20 @@ const ListaServicio = ({ navigation }) => {
     getEmpresas();
   }, []);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const getEmpresas = async () => {
+        let res = await API.getData("emp")
+        setEmpresas(res)
+      }
+  
+      getEmpresas();
+    }, [])
+  );
   return (
     <Container>
-      <Header searchBar rounded style={styles.search}>
-        <Item>
-          <Icon name="ios-search" />
-          <Input placeholder="Search" />
-        </Item>
-        <Button transparent>
-          <Text>Search</Text>
-        </Button>
+      <Header>
+        <Text style={{color: "white", fontWeight: 'bold', marginTop: 10, fontSize: 20}}>Servicios Disponibles</Text>
       </Header>
       <Content padder>
         {empresas.map((emp) => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Ionicons, FontAwesome } from "@expo/vector-icons"
 import { Form, Item, Input, Body, Text, Button, Container, Content } from 'native-base'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -7,7 +7,7 @@ import { API } from '../helpers'
 import { colors, url } from '../global.json'
 import { useForm, Controller } from "react-hook-form";
 
-const Registro = () => {
+const Registro = ({navigation}) => {
   const {
     control,
     handleSubmit,
@@ -21,9 +21,11 @@ const Registro = () => {
       return;
     }
     data.telefono = parseInt(data.telefono)
-    let res = await API.getBody('log/insert', 'POST', data)
-    if(res.data.hasOwnProperty("status")) setPwdError(res.data.msg)
-    else if (res.status === 200) navigation.navigate('Login')
+    let res = await API.getLog('log/usu/insert', data)
+    if(res.hasOwnProperty("status")) setPwdError(res.msg)
+    else if (res.code === 200){
+      navigation.navigate('Login')
+    } else setPwdError("Error al insertar intentelo después")
   }
 
   return (

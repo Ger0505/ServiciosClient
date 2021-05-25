@@ -21,7 +21,6 @@ class Login extends Component {
       password: this.state.password
     }
     let res = await API.getLog("log/usu", params)
-    console.log(res);
     if (res.code === 401 || res.code === 500) {
       this.setState({ textError: 'Verificar usuario y/o contraseña' })
     } else if (res.code === 200) {
