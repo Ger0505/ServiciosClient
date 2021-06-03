@@ -1,75 +1,122 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { View, Image, StyleSheet } from 'react-native';
 import { Form, Item, Input, Text, Button } from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { API } from '../helpers'
 import { colors } from '../global.json'
-
+import { useForm, Controller } from "react-hook-form";
+import { useFocusEffect } from '@react-navigation/native';
 import Logo from '../assets/logo.png'
 
-class Login extends Component {
-  state = {
-    correo: '',
-    password: '',
-    textError: ''
-  }
+const Login = ({navigation}) => {
+  const [textError, setTextError] = useState('');
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm();
 
-  login = async () => {
-    let params = {
-      correo: this.state.correo,
-      password: this.state.password
-    }
-    let res = await API.getLog("log/usu", params)
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        setTextError('')
+        reset()
+      };
+    }, [])
+  );
+
+  const login = async data => {
+    let res = await API.getLog("log/usu", data)
     if (res.code === 401 || res.code === 500) {
-      this.setState({ textError: 'Verificar usuario y/o contraseña' })
+      setTextError('Verificar usuario y/o contraseña')
     } else if (res.code === 200) {
-      this.guardarSession(res)
+      await guardarSession(res)
+      navigation.navigate("UserApp")
     }
   }
 
-  guardarSession = async res => {
+  const guardarSession = async res => {
     try {
       await AsyncStorage.setItem('@usuario', JSON.stringify(res.usuario))
       await AsyncStorage.setItem('@token',JSON.stringify(res.token))
-      this.props.navigation.navigate('UserApp')
+      navigation.navigate('UserApp')
     } catch (err) {
       console.log("ERROR:" + err);
     }
   }
-
-  render() {
-    const { navigation } = this.props
-
-    return (
-      <View style={styles.container}>
+  return ( 
+<View style={styles.container}>
         <View style={styles.middle}>
           <Image source={Logo} style={styles.image} />
           {/* <Text style={styles.textContainer}>Servicios</Text> */}
 
           <View style={styles.formArea}>
             <Text style={[styles.textContainer, styles.signin]}>Iniciar Sesión</Text>
-            <Text style={{ color: 'red', fontSize: 15, alignSelf: 'center' }} >{this.state.textError}</Text>
+            <Text style={{ color: 'red', fontSize: 15, alignSelf: 'center' }} >{textError}</Text>
             <Form style={styles.mainForm}>
-              <Item rounded style={styles.input}>
-                <Ionicons name="mail" size={16} color="gray" />
-                <Input placeholder="Correo Electrónico"
-                  value={this.state.correo}
-                  onChangeText={text => this.setState({ correo: text })}
-                  onChange={() => this.setState({ textError: '' })}
+            <Controller
+                  control={control}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Item rounded style={styles.input}>
+                      <Ionicons name="mail" size={16} color="gray" />
+                      <Input
+                        placeholder="Correo Electrónico"
+                        keyboardType="email-address"
+                        onBlur={onBlur}
+                        value={value}
+                        onChangeText={(value) => onChange(value)}
+                      />
+                    </Item>
+                  )}
+                  name="correo"
+                  rules={{
+                    required: {
+                      value: true,
+                      message: "El correo es requerido"
+                    },
+                    pattern: {
+                      value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/,
+                      message: "Formato de correo incorrecto"
+                    }
+                  }}
+                  defaultValue=""
                 />
-              </Item>
-              <Item rounded style={styles.input}>
-                <FontAwesome name="lock" size={24} color="gray" />
-                <Input placeholder="Contraseña" secureTextEntry={true}
-                  value={this.state.password}
-                  onChangeText={text => this.setState({ password: text })}
-                  onChange={() => this.setState({ textError: '' })}
+                {errors.correo && (
+                  <Text style={styles.textError,{ color: 'red', fontSize: 15, alignSelf: 'center' }}>{errors.correo?.message}</Text>
+                )}
+              <Controller
+                  control={control}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Item rounded style={styles.input}>
+                      <FontAwesome name="lock" size={24} color="gray" />
+                      <Input
+                        placeholder="Contraseña"
+                        secureTextEntry={true}
+                        onBlur={onBlur}
+                        value={value}
+                        onChangeText={(value) => onChange(value)}
+                      />
+                    </Item>
+                  )}
+                  name="password"
+                  rules={{
+                    required: {
+                      value: true,
+                      message: "La contraseña es requerida"
+                    }
+                  }}
+                  defaultValue=""
                 />
-              </Item>
+                {errors.password && (
+                  <Text style={styles.textError,{ color: 'red', fontSize: 15, alignSelf: 'center' }}>
+                    {errors.password?.message}
+                  </Text>
+                )}
               <View style={styles.Button}>
-                <Button block style={styles.mainBtn}>
-                  <Text style={styles.btnText} onPress={this.login}>Iniciar</Text>
+                <Button block style={styles.mainBtn} onPress={handleSubmit(login)}>
+                  <Text style={styles.btnText}>Iniciar</Text>
                 </Button>
               </View>
             </Form>
@@ -79,8 +126,7 @@ class Login extends Component {
           </View>
         </View>
       </View>
-    );
-  }
+   );
 }
 
 export default Login;

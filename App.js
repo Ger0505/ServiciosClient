@@ -38,12 +38,11 @@ class App extends Component {
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Loading"
-          screenOptions={{ headerShown: false }}
         >
-          <Stack.Screen name="Loading" component={Loading} />
-          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Loading" component={Loading} options={{ headerShown: false }}/>
+          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
           <Stack.Screen name="Registro" component={Registro} />
-          <Stack.Screen name="UserApp" component={UserApp} />
+          <Stack.Screen name="UserApp" component={UserApp} options={{ headerShown: false }}/>
         </Stack.Navigator>
       </NavigationContainer>
     );

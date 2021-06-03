@@ -15,7 +15,7 @@ import { API } from "../helpers";
 import { useFocusEffect } from '@react-navigation/native'
 
 import imgDefault from "./../assets/1.png";
-const URL_FILE = url_file + "uploads/";
+const URL_FILE = url_file + "getimage/";
 
 const ListaServicio = ({ navigation }) => {
   const [empresas, setEmpresas] = useState([]);

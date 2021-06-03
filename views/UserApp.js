@@ -17,7 +17,6 @@ const ServiceStack = createStackNavigator();
 
 const ServiceStackScreen = () => (
   <ServiceStack.Navigator screenOptions={{
-    headerShown: false,
     headerStyle: {
       backgroundColor: '#f37d10',  //#f4511e
     },
@@ -26,10 +25,10 @@ const ServiceStackScreen = () => (
       fontWeight: 'bold',
     }
   }}>
-    <ServiceStack.Screen name="ListaServicio" component={ListaServicio} options={{ title: 'Servicios' }} />
+    <ServiceStack.Screen name="ListaServicio" component={ListaServicio} options={{ title: 'Servicios', headerShown: false }} />
     <ServiceStack.Screen name="FormTanque" component={FormTanque} options={{ title: 'Gas Natural' }} />
-    <ServiceStack.Screen name="FormEstacionario" component={FormEstacionario} options={{ title: 'Gas Estacionario' }} />
-    <ServiceStack.Screen name="FormAgua" component={FormAgua} options={{ title: 'Agua' }} />
+    <ServiceStack.Screen name="FormEstacionario" component={FormEstacionario} options={{ title: 'Gas Natural' }} />
+    <ServiceStack.Screen name="FormAgua" component={FormAgua} options={{ title: 'Agua Purificada' }} />
   </ServiceStack.Navigator>
 )
 
@@ -66,7 +65,7 @@ const UserApp = ({navigation}) => {
           inactiveTintColor: 'gray',
         }}
       >
-        <Tab.Screen name="Services" component={ServiceStackScreen} />
+        <Tab.Screen name="Services" component={ServiceStackScreen} options={{title: 'Servicios'}} />
         <Tab.Screen name="ListaPedido" component={ListaPedido} />
         {/* <Tab.Screen name="ListaNotificacion" component={ListaNotificacion} /> */}
         <Tab.Screen name="Perfil" component={child} />

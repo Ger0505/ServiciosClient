@@ -16,8 +16,8 @@ const ChangePwdForm = ({ styles, _id, url }) => {
         } else {
             data._id = _id
             let res = await API.getBody('usu/resetPwd', 'PUT', data)
-            if(res.hasOwnProperty("msg")) setPwdError(res.msg)
-            else if(res.status === 200){
+            if(res.hasOwnProperty("status")) setPwdError(res.msg)
+            else if(res.code === 200){
                 Alert.alert(
                     'Cambiar Contraseña', 'Su contraseña fue cambiada correctamente',
                     [

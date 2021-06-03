@@ -1,19 +1,30 @@
 import React, { useState } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Image } from 'react-native'
 import { Ionicons, FontAwesome } from "@expo/vector-icons"
 import { Form, Item, Input, Body, Text, Button, Container, Content } from 'native-base'
 import { LinearGradient } from 'expo-linear-gradient'
 import { API } from '../helpers'
 import { colors, url } from '../global.json'
 import { useForm, Controller } from "react-hook-form";
+import { useFocusEffect } from '@react-navigation/native';
+import Logo from '../assets/logo.png'
 
 const Registro = ({navigation}) => {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm();
   const [pwdError, setPwdError] = useState("");
+
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        reset()
+      };
+    }, [])
+  );
 
   const onSubmit = async data => {
     if (data.password !== data.repassword) {
@@ -23,9 +34,8 @@ const Registro = ({navigation}) => {
     data.telefono = parseInt(data.telefono)
     let res = await API.getLog('log/usu/insert', data)
     if(res.hasOwnProperty("status")) setPwdError(res.msg)
-    else if (res.code === 200){
-      navigation.navigate('Login')
-    } else setPwdError("Error al insertar intentelo después")
+    else if (res.code === 200) navigation.navigate('Login')
+    else setPwdError("Error al insertar intentelo después")
   }
 
   return (
@@ -36,11 +46,8 @@ const Registro = ({navigation}) => {
           style={styles.background}
         >
           <View style={styles.middle}>
-            <Text style={styles.textContainer}>Servicios</Text>
+          <Image source={Logo} style={{width: '37%', height: '13%',alignSelf: "center",top: "2%", }}/>
             <View style={styles.formArea}>
-              <Text style={[styles.textContainer, styles.signin]}>
-                Registro
-              </Text>
               <Form style={styles.mainForm}>
                 <Controller
                   control={control}
@@ -298,7 +305,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 30,
     position: "relative",
-    top: "10%",
+    top: "5%",
     alignSelf: "center"
   },
   formArea: {
@@ -306,7 +313,7 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#ffffff",
     borderRadius: 5,
-    top: "10%",
+    top: "5%",
     paddingBottom: 50,
     marginBottom: 100
   },

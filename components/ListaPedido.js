@@ -18,6 +18,7 @@ const ItemPedido = ({ data }) => (
     </CardItem>
     <CardItem>
       <Body>
+        <Text style={{fontStyle: "italic"}}>{data.empresa.nombre}</Text>
         <Text style={styles.title}>${data.precio}</Text>
         <Text style={styles.title}>Cantidad: {data.cantidad}</Text>
         <Text style={styles.text}>{data.descripcion}</Text>
