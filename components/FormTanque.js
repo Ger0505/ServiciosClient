@@ -26,7 +26,7 @@ const FormTanque = ({ navigation, route }) => {
     if (tanques === "" || litros === "") {
       setError("Todo campo es requerido");
       return;
-    } else if (parseInt(tanques) <= 0) {
+    } else if (parseInt(tanques) <= 0 || isNaN(parseInt(tanques))) {
       setError("Tanques mayor a 0");
       return;
     }
@@ -70,6 +70,7 @@ const FormTanque = ({ navigation, route }) => {
     else if (value === "30") setLitros("30 Litros");
     else if (value === "40") setLitros("40 Litros");
     else if (value === "50") setLitros("50 Litros");
+    else setLitros("");
     setCosto(value);
   };
 

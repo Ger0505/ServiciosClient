@@ -9,6 +9,7 @@ import { useForm, Controller } from "react-hook-form"
 import ChangePwdForm from './ChangePwdForm'
 
 const Perfil = ({ cb }) => {
+  const [errorMsg, setErrorMsg] = useState("");
   const [usuario, setUsuario] = useState({
     nombre: "",
     apellidos: "",
@@ -35,6 +36,7 @@ const Perfil = ({ cb }) => {
         user.telefono = user.telefono + "";
         setUsuario(user);
         reset(user);
+        setErrorMsg("")
       }
     } catch (e) {
       console.log(e);
@@ -44,8 +46,12 @@ const Perfil = ({ cb }) => {
   const onSubmit = async data => {
     data._id = usuario._id
     data.telefono = parseInt(data.telefono)
+    console.log(data);
     let res = await API.getBody('usu/update', 'PUT', data)
-    if(res.code === 200){
+    if(res.code === 200 && res.hasOwnProperty("status")){
+      setErrorMsg(res.msg)
+    }else if(res.code === 200){
+      setErrorMsg("")
       Alert.alert(
         'Actualizar Perfil', 'Su perfil fue actualizado correctamente',
         [
@@ -232,6 +238,9 @@ const Perfil = ({ cb }) => {
           />
           {errors.correo && (
             <Text style={styles.textError}>{errors.correo?.message}</Text>
+          )}
+          {errorMsg !== "" && (
+            <Text style={styles.textError}>{errorMsg}</Text>
           )}
           <Button block onPress={handleSubmit(onSubmit)}>
             <Text>Guardar</Text>

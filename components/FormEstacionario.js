@@ -25,7 +25,7 @@ const FormEstacionario = ({ navigation, route }) => {
   const { idEmp, empresa } = route.params;
 
   const _onSubmit = async () => {
-    if (litros === "" && parseInt(litros) && !isLleno) {
+    if ((litros === "" && !isLleno) || (isNaN(parseInt(litros)) && !isLleno) || (parseInt(litros)<=0 && !isLleno)) {
       setError(true);
       return;
     }
@@ -34,8 +34,8 @@ const FormEstacionario = ({ navigation, route }) => {
       if (usuario !== null) {
         let params = {
           tipo: "Estacionario",
-          cantidad: isLleno ? -1 : parseInt(litros),
-          precio: isLleno ? -1 : parseInt(litros) * COSTO_X_LITRO,
+          cantidad: isLleno ? 0 : parseInt(litros),
+          precio: isLleno ? 0 : parseInt(litros) * COSTO_X_LITRO,
           descripcion: isLleno ? "Tanque Lleno" : "",
           empresa: idEmp,
           usuario: usuario._id
@@ -75,6 +75,7 @@ const FormEstacionario = ({ navigation, route }) => {
               onPress={() => {
                 setLleno(!isLleno);
                 setLitros("");
+                setError(false)
               }}
             />
             <Body>
@@ -146,5 +147,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginLeft: 15,
     marginTop: 20
+  },
+  textError: {
+    color: "red",
+    alignSelf: "center",
+    fontStyle: "italic",
+    fontSize: 12
   }
 });

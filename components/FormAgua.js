@@ -31,7 +31,7 @@ const FormAgua = ({ navigation, route }) => {
   };
 
   const _onSubmit = async () => {
-    if (cantidad === "" || parseInt(cantidad)<=0) {
+    if (cantidad === "" || parseInt(cantidad)<=0 || isNaN(parseInt(cantidad))) {
       setError(true);
       return;
     }

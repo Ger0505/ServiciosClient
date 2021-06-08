@@ -4,6 +4,6 @@
     "second": "#1DDCAF",
     "third": "#7772ff"
   },
-  "url": "https://servicios-api.herokuapp.com/",
+  "url": "https://servicios-app.herokuapp.com/",
   "url_file": "https://servicios-file.herokuapp.com/"
 }
